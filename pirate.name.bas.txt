@@ -1,0 +1,121 @@
+ 10  HOME
+ 20  NN = 1: REM  Silly Name by default
+ 30  GOSUB 8500: REM  READ pirate name data
+ 40  GOSUB 8300: REM  DRAW BORDER
+ 50  VTAB 1: INVERSE :ST$ = "WHATS YOUR PIRATE NAME?": GOSUB 8400: NORMAL
+ 70  VTAB 5: HTAB 3: PRINT "1. Your name as pirate name."
+ 80  VTAB 7: HTAB 3: PRINT "2. Display a random pirate name."
+ 90  VTAB 9: HTAB 3: PRINT "3. Switch Silly <-> Proper Names."
+ 100  VTAB 10: FOR X = 2 TO 38: HTAB X: PRINT " "
+ 110  VTAB 10: HTAB (17 * NN) - 11: PRINT "------------"
+ 120  VTAB 12: HTAB 3: PRINT "4. Quit"
+ 130  VTAB 3: HTAB 30: GET C$:C =  ASC (C$)
+ 140  IF C < 49 AND C > 52 THEN  PRINT  CHR$ (7): GOTO 130
+ 150  IF C = 49 THEN  GOSUB 7000
+ 160  IF C = 50 THEN  GOSUB 6000
+ 170  IF C = 51 THEN  GOSUB 5000
+ 180  IF C = 52 THEN  GOTO 200
+ 190  GOTO 40
+ 200  HOME : END
+ 5000  REM ******** Switch between Silly and Proper ********
+ 5010  IF NN = 1 THEN NN = 2: GOTO 5090
+ 5020  IF NN = 2 THEN NN = 1: GOTO 5030
+ 5030  REM  Silly Names
+ 5040  RESTORE
+ 5050  FOR I = 1 TO 26: READ NF$(I): NEXT I
+ 5060  FOR I = 1 TO 26: READ NM$(I): NEXT I
+ 5070  FOR I = 1 TO 26: READ NL$(I): NEXT I
+ 5080  GOTO 5150
+ 5090  REM  Proper Names
+ 5100  RESTORE
+ 5110  FOR I = 1 TO 78: READ A$: NEXT I
+ 5120  FOR I = 1 TO 26: READ NF$(I): NEXT I
+ 5130  FOR I = 1 TO 26: READ NM$(I): NEXT I
+ 5140  FOR I = 1 TO 26: READ NL$(I): NEXT I
+ 5150  RETURN
+ 6000  REM ******** RANDOM PIRATE NAME ********
+ 6010  GOSUB 8300: REM  DRAW BORDER
+ 6020  VTAB 1: INVERSE :ST$ = "YOUR NAME AS A PIRATE NAME": GOSUB 8400: NORMAL
+ 6030  VTAB 7: FOR X = 2 TO 39: HTAB X: PRINT " ";: NEXT X
+ 6040  VTAB 8: FOR X = 2 TO 39: HTAB X: PRINT " ";: NEXT X
+ 6050  RM = 26: GOSUB 8200:PF = RN: GOSUB 8200:PM = RN: GOSUB 8200:PL = RN
+ 6060  VTAB 5: HTAB 3: PRINT "A pirate name randomly generated is:"
+ 6070  PN$ = NF$(PF) + " " + NM$(PM) + " " + NL$(PL)
+ 6080  IF  LEN (PN$) > 36 THEN  GOTO 6110
+ 6090  VTAB 7: HTAB 3: PRINT PN$
+ 6100  GOTO 6130
+ 6110  VTAB 7: HTAB 3: PRINT NF$(PF) + " " + NM$(PM)
+ 6120  VTAB 8: HTAB 3: PRINT NL$(PL)
+ 6130  VTAB 15: HTAB 3: PRINT "Press M for menu."
+ 6140  VTAB 16: HTAB 3: PRINT "Press any other key for another name."
+ 6150  VTAB 15: HTAB 2: GET X$
+ 6160  IF X$ <  > "M" AND X$ <  > "m" THEN  GOTO 6020
+ 6170  RETURN
+ 7000  REM ******** REAL NAME TO PIRATE NAME ********
+ 7010  GOSUB 8300
+ 7020  VTAB 1: INVERSE :ST$ = "A PIRATE NAME BASED ON INITIALS": GOSUB 8400: NORMAL
+ 7025  VTAB 22: HTAB 5:PRINT "ENSURE ";:INVERSE:PRINT "CAPSLOCK";:NORMAL:PRINT " IS ON!"
+ 7030  VTAB 3: HTAB 3: PRINT "FIRST INITIAL:";: GET PF$: VTAB 3: HTAB 17: PRINT PF$
+ 7040  IF  ASC (PF$) < 65 OR  ASC (PF$) > 90 THEN  VTAB 3: HTAB 17: PRINT CHR$ (7): GOTO 7030
+ 7050  VTAB 4: HTAB 3: PRINT "MIDDLE INITIAL:";: GET PM$: VTAB 4: HTAB 18: PRINT PM$
+ 7060  IF  ASC (PM$) < 65 OR  ASC (PM$) > 90 THEN  VTAB 3: HTAB 18: PRINT CHR$ (7): GOTO 7050
+ 7070  VTAB 5: HTAB 3: PRINT "LAST INITIAL:";: GET PL$: VTAB 5: HTAB 16: PRINT PL$
+ 7080  IF  ASC (PL$) < 65 OR  ASC (PM$) > 90 THEN  VTAB 15: HTAB 16: PRINT CHR$ (7): GOTO 7070
+ 7090  VTAB 10: HTAB 3: PRINT "Your pirate name is:"
+ 7100  VTAB 12: HTAB 3: PRINT NF$( ASC (PF$) - 64);" ";NM$( ASC (PM$) - 64);" ";NL$( ASC (PL$) - 64)
+ 7110  VTAB 15: HTAB 3: PRINT "Press any key for the menu."
+ 7120  VTAB 15: HTAB 2: GET C$
+ 8200  REM ******** RANDOM NUMBER ********
+ 8210  REM  MUST PUT THE MAX NUMBER IN RS-Random Max; ex. RS=26
+ 8220  RN =  INT ( RND ( PEEK (78) +  PEEK (79) * 256) * RM)
+ 8230  RETURN
+ 8300  REM ********  DRAW BORDER  ********
+ 8310  HOME :A$ = " "
+ 8320  INVERSE : FOR I = 1 TO 41: PRINT A$;: NEXT
+ 8330  FOR I = 1 TO 22: HTAB 40: PRINT A$A$;: NEXT
+ 8340  FOR I = 1 TO 38: PRINT A$;: NEXT : POKE 2039, ASC (A$): NORMAL
+ 8345  VTAB 24:INVERSE: ST$="(C) GREG JEWETT * V1.2 * 8-BIT SHACK": GOSUB 8400: NORMAL
+ 8350  RETURN
+ 8400  REM ********  CENTER STRING ST$  ********
+ 8410  B =  INT (20 - ( LEN (ST$) / 2)): IF B =  < 0 THEN B = 1
+ 8420  HTAB B: PRINT ST$;: RETURN
+ 8500  REM ********  READ IN PIRATE NAME DB *******
+ 8510  DIM NF$(26): DIM NM$(26): DIM NL$(26)
+ 8520  FOR I = 1 TO 26: READ NF$(I): NEXT I
+ 8530  FOR I = 1 TO 26: READ NM$(I): NEXT I
+ 8540  FOR I = 1 TO 26: READ NL$(I): NEXT I
+ 8550  RETURN
+ 8999  END
+ 9000  REM  -- First Name
+ 9010  DATA  "Swashbuckler","Shipmate","Yerr","Rapscallion","Mad","Creeper","Captain"
+ 9020  DATA  "Grubby","Fancy Pants","Money Buckets","Peg Leg","Billygoat","Surly","Periwinkle"
+ 9030  DATA  "Stinky","Matey","Royal","Rascal","Plunderin'","Fish Face","Jolly"
+ 9040  DATA  "Two Toe","Sea","Spike","Scurvy","Booty"
+ 9050  REM -- Middle Name --
+ 9060  DATA  "Big lips","Kidd","Stinkalot","Fishmonger","Scarlet","O'Patches","Landlubber"
+ 9070  DATA  "d'Plank","Cannon Shooter","Dirty Locks","Shady Cooper","Stinky Breath","Spike","Hookhand"
+ 9080  DATA  "Freebooter","Shipwreck","McStubby","Sparrow","Wobbly Peg","McMonkey", "Puffypants"
+ 9090  DATA  "McWinky","Sparrow","Lobster Legs","Three Eyes","O'Jelly"
+ 9100  REM -- Last Name --
+ 9110  DATA  "O'Greedy","Jackson","Sparrow","Jones","Bart","O'Fish","Stinkalot"
+ 9120  DATA  "d'Plank","Barnacle","Hornswagg","Shady Cooper","Beard","McStinky","Swashbuckler"
+ 9130  DATA  "Sea Wolf","Of Dark Water","Black","Sparrow","Puffy pants","Wobby Peg","Tuna Breath"
+ 9140  DATA  "Atlantis","Bailey","Sharkbait","Freebooter","Lobster Legs"
+ 9200  REM  --- Proper Pirate First Names
+ 9210  DATA  "Angry Amos","Barnacle Bill","Cutlass Clara","Dagger Dan","Eyepatch Ellie"
+ 9220  DATA  "Flintlock Fred","Grimy Greta","Hook-Hand Hank","Iron Ida","Jolly Jack"
+ 9230  DATA  "Kraken Kate","Long-Legged Lou","Mad Molly","No-Beard Ned","One-Eyed Olive"
+ 9240  DATA  "Peg-Leg Pete","Quick Quinn","Rusty Roger","Salty Sue","Toothless Tom"
+ 9250  DATA  "Ugly Ursula","Vicious Vane","Warty Wilma","Xebec Xavier","Yarrin Yvette","Zesty Zeke"
+ 9260  REM   --- Proper Pirate Middle Names
+ 9270  DATA  "Blackheart","Buccaneer","Cannonball","Crows Nest","Deadlight"
+ 9280  DATA  "Doubloon","Eel-Biter","Fishbreath","Goldfang","Gunpowder","Hardtack"
+ 9290  DATA  "Ironhook","Jib-Cutter","Keelhauler","Landlubber","Marooner"
+ 9300  DATA  "Nightwatch","Oathbreaker","Plank-Walker","Quartermaster","Rumrunner"
+ 9310  DATA  "Scallywag","Treasure-Tongue","Undertow","Voodoo","Whalebone"
+ 9320  REM   --- Proper Pirate Last Names
+ 9330  DATA  "Ashgrove","Blackwater","Cutthroat","Deepwake","Emberstorm"
+ 9340  DATA  "Foulwind","Grimjaw","Hellspar","Ironskull","Jetwake","Killshore"
+ 9350  DATA  "Leviathan","Moorfang","Nightgale","ODrift","Plunderbay"
+ 9360  DATA  "Quicktide","Redwake","Stormlash","Thunderskull","Undertide"
+ 9370  DATA  "Vilefang","Windscar","Xmark","Yardarm","Zephyrgale"
